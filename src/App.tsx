@@ -1,16 +1,19 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import {
   certificates,
   education,
   experiences,
+  highlights,
+  navItems,
   profile,
-  strengths,
+  projects,
+  skillGroups,
 } from "./data";
 
 type ThemeMode = "auto" | "light" | "dark";
 
 const themeOptions: Array<{ value: ThemeMode; label: string }> = [
-  { value: "auto", label: "Automático" },
+  { value: "auto", label: "Auto" },
   { value: "light", label: "Claro" },
   { value: "dark", label: "Escuro" },
 ];
@@ -25,16 +28,6 @@ function App() {
 
     return "auto";
   });
-
-  const resolvedTheme = useMemo(() => {
-    if (themeMode !== "auto") {
-      return themeMode;
-    }
-
-    return window.matchMedia("(prefers-color-scheme: dark)").matches
-      ? "dark"
-      : "light";
-  }, [themeMode]);
 
   useEffect(() => {
     const media = window.matchMedia("(prefers-color-scheme: dark)");
@@ -62,11 +55,11 @@ function App() {
 
   return (
     <div className="page-shell">
-      <header className="hero">
+      <header className="hero" id="topo">
         <div className="hero-copy">
           <div className="hero-topbar">
-            <span className="eyebrow">Currículo Online</span>
-            <div className="theme-switcher" aria-label="Selecionar tema">
+            <span className="eyebrow">Curriculo Online</span>
+            <div className="theme-switcher" role="group" aria-label="Selecionar tema">
               {themeOptions.map((option) => (
                 <button
                   key={option.value}
@@ -80,45 +73,37 @@ function App() {
               ))}
             </div>
           </div>
-          <h1>{profile.name}</h1>
-          <p className="hero-title">{profile.title}</p>
-          <p className="hero-text">{profile.intro}</p>
-          <div className="hero-actions">
-            <a href={`mailto:${profile.email}`} className="button button-primary">
+
+          <div className="hero-main">
+            <p className="hero-kicker">Front-end / Full-stack</p>
+            <h1>{profile.name}</h1>
+            <p className="hero-title">{profile.title}</p>
+            <p className="hero-text">{profile.intro}</p>
+          </div>
+
+          <div className="hero-actions" aria-label="Acoes principais">
+            <a href={profile.resumePdf} className="button button-primary" download>
+              Baixar PDF
+            </a>
+            <a href="#projetos" className="button button-secondary">
+              Ver projetos
+            </a>
+            <a href={`mailto:${profile.email}`} className="button button-ghost">
               Entrar em contato
             </a>
-            <a href="#experiencia" className="button button-secondary">
-              Ver experiência
-            </a>
           </div>
-          <div className="social-links">
-            <a href={profile.linkedin} target="_blank" rel="noreferrer">
-              <SocialIcon kind="linkedin" />
-              <span>LinkedIn</span>
-            </a>
-            <a href={profile.github} target="_blank" rel="noreferrer">
-              <SocialIcon kind="github" />
-              <span>GitHub</span>
-            </a>
-            <a href={profile.whatsapp} target="_blank" rel="noreferrer">
-              <SocialIcon kind="whatsapp" />
-              <span>WhatsApp</span>
-            </a>
-          </div>
+
+          <SocialLinks className="social-links" />
         </div>
 
-        <aside className="hero-card">
-          <img
-            src="/profile.png"
-            alt={`Foto de ${profile.name}`}
-            className="profile-image"
-          />
+        <aside className="hero-card" aria-label="Resumo de contato e stack">
+          <img src="/profile.png" alt={`Foto de ${profile.name}`} className="profile-image" />
           <div className="hero-meta">
             <p>{profile.location}</p>
             <a href={`mailto:${profile.email}`}>{profile.email}</a>
           </div>
           <div className="hero-skills">
-            <span className="section-label">Competências-chave</span>
+            <span className="section-label">Stack curta</span>
             <ul className="focus-list">
               {profile.focus.map((item) => (
                 <li key={item}>{item}</li>
@@ -128,44 +113,120 @@ function App() {
         </aside>
       </header>
 
+      <nav className="section-nav" aria-label="Navegacao principal do curriculo">
+        {navItems.map((item) => (
+          <a key={item.href} href={item.href}>
+            {item.label}
+          </a>
+        ))}
+      </nav>
+
       <main className="content">
-        <section className="panel panel-highlight">
+        <section className="highlight-strip" aria-label="Destaques profissionais">
+          {highlights.map((item) => (
+            <div className="highlight-item" key={`${item.value}-${item.label}`}>
+              <strong>{item.value}</strong>
+              <span>{item.label}</span>
+            </div>
+          ))}
+        </section>
+
+        <section className="panel panel-highlight" aria-labelledby="objetivo-title">
           <span className="section-label">Objetivo</span>
+          <h2 id="objetivo-title">Produtos digitais com impacto operacional</h2>
           <p>{profile.objective}</p>
         </section>
 
-        <section id="experiencia" className="content-grid">
-          <div className="section-heading">
-            <span className="section-label">Experiência</span>
-            <h2>Trajetória com foco em dados, tecnologia e execução</h2>
-          </div>
-          <div className="timeline">
-            {experiences.map((job) => (
-              <article className="timeline-item" key={`${job.role}-${job.period}`}>
-                <div className="timeline-marker" />
-                <div className="timeline-card">
-                  <div className="timeline-header">
-                    <div>
-                      <h3>{job.role}</h3>
-                      <p>{job.summary}</p>
+        <section className="work-grid" aria-label="Experiencia e projetos">
+          <div id="experiencia" className="content-grid" aria-labelledby="experiencia-title">
+            <div className="section-heading">
+              <span className="section-label">Experiencia</span>
+              <h2 id="experiencia-title">Entrega tecnica em ambiente corporativo</h2>
+            </div>
+            <div className="timeline">
+              {experiences.map((job) => (
+                <article className="timeline-item" key={`${job.role}-${job.period}`}>
+                  <div className="timeline-marker" aria-hidden="true" />
+                  <div className="timeline-card">
+                    <div className="timeline-header">
+                      <div>
+                        <h3>{job.role}</h3>
+                        <p>{job.summary}</p>
+                      </div>
+                      <span>{job.period}</span>
                     </div>
-                    <span>{job.period}</span>
+                    <ul>
+                      {job.highlights.map((highlight) => (
+                        <li key={highlight}>{highlight}</li>
+                      ))}
+                    </ul>
                   </div>
-                  <ul>
-                    {job.highlights.map((highlight) => (
-                      <li key={highlight}>{highlight}</li>
+                </article>
+              ))}
+            </div>
+          </div>
+
+          <section id="projetos" className="content-grid" aria-labelledby="projetos-title">
+            <div className="section-heading">
+              <span className="section-label">Projetos</span>
+              <h2 id="projetos-title">Cases aplicados e prova tecnica</h2>
+            </div>
+            <div className="project-grid">
+              {projects.map((project) => (
+                <article className="project-card" key={project.title}>
+                  <div className="project-card-header">
+                    <span>{project.type}</span>
+                    <h3>{project.title}</h3>
+                  </div>
+                  <p>{project.description}</p>
+                  <p className="project-impact">{project.impact}</p>
+                  <ul className="project-stack" aria-label={`Stack do projeto ${project.title}`}>
+                    {project.stack.map((item) => (
+                      <li key={item}>{item}</li>
                     ))}
                   </ul>
-                </div>
+                  {project.links.length > 0 ? (
+                    <div className="project-links">
+                      {project.links.map((link) => (
+                        <a
+                          key={link.url}
+                          href={link.url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          aria-label={`${link.label} de ${project.title} em nova aba`}
+                        >
+                          {link.label}
+                        </a>
+                      ))}
+                    </div>
+                  ) : null}
+                </article>
+              ))}
+            </div>
+          </section>
+        </section>
+
+        <section id="stack" className="panel" aria-labelledby="stack-title">
+          <span className="section-label">Stack</span>
+          <h2 id="stack-title">Competencias organizadas por area</h2>
+          <div className="skill-grid">
+            {skillGroups.map((group) => (
+              <article className="skill-card" key={group.title}>
+                <h3>{group.title}</h3>
+                <ul>
+                  {group.items.map((item) => (
+                    <li key={item}>{item}</li>
+                  ))}
+                </ul>
               </article>
             ))}
           </div>
         </section>
 
-        <section className="dual-grid">
-          <article className="panel">
-            <span className="section-label">Formação</span>
-            <h2>Base acadêmica e evolução contínua</h2>
+        <section id="formacao" className="dual-grid" aria-label="Formacao e certificados">
+          <article className="panel" aria-labelledby="formacao-title">
+            <span className="section-label">Formacao</span>
+            <h2 id="formacao-title">Base academica e evolucao continua</h2>
             <div className="stack-list">
               {education.map((item) => (
                 <div className="stack-item" key={`${item.title}-${item.period}`}>
@@ -181,68 +242,79 @@ function App() {
             </div>
           </article>
 
-          <article className="panel">
-            <span className="section-label">Competências Estratégicas</span>
-            <h2>Áreas de atuação com entrega prática</h2>
-            <p className="panel-intro">
-              Atuação concentrada em dados, desenvolvimento e IA aplicada, com foco
-              em soluções que melhoram operação, análise e experiência interna.
-            </p>
-            <div className="tag-cloud">
-              {strengths.map((strength) => (
-                <span key={strength} className="tag">
-                  {strength}
-                </span>
+          <article className="panel" aria-labelledby="certificados-title">
+            <span className="section-label">Certificados</span>
+            <h2 id="certificados-title">Complementos relevantes</h2>
+            <div className="certificate-list">
+              {certificates.map((certificate) => (
+                <a
+                  key={certificate.title}
+                  className={certificate.priority ? "certificate-card is-priority" : "certificate-card"}
+                  href={certificate.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={`Abrir certificado ${certificate.title} em nova aba`}
+                >
+                  <span>{certificate.priority ? "Prioritario" : "Certificado"}</span>
+                  <strong>{certificate.title}</strong>
+                </a>
               ))}
             </div>
           </article>
         </section>
-
-        <section className="panel">
-          <span className="section-label">Certificados</span>
-          <h2>Complementos relevantes da formação</h2>
-          <div className="certificate-grid">
-            {certificates.map((certificate) => (
-              <a
-                key={certificate.title}
-                className="certificate-card"
-                href={certificate.url}
-                target="_blank"
-                rel="noreferrer"
-              >
-                <span>Certificado</span>
-                <strong>{certificate.title}</strong>
-              </a>
-            ))}
-          </div>
-        </section>
       </main>
 
-      <footer className="site-footer">
+      <footer id="contato" className="site-footer">
         <div className="footer-brand">
           <strong>{profile.name}</strong>
-          <p>Dados, Desenvolvimento e IA aplicada</p>
+          <p>{profile.title}</p>
         </div>
         <div className="footer-cta">
-          <p className="footer-note">
-            Disponível para oportunidades, parcerias e projetos.
-          </p>
-        </div>
-        <div className="footer-links">
-          <a href={profile.linkedin} target="_blank" rel="noreferrer">
-            <SocialIcon kind="linkedin" />
-            <span>LinkedIn</span>
-          </a>
-          <a href={profile.github} target="_blank" rel="noreferrer">
-            <SocialIcon kind="github" />
-            <span>GitHub</span>
-          </a>
-          <a href={profile.whatsapp} target="_blank" rel="noreferrer">
-            <SocialIcon kind="whatsapp" />
-            <span>WhatsApp</span>
+          <p className="footer-note">Disponivel para oportunidades, parcerias e projetos.</p>
+          <a href={profile.resumePdf} className="button button-primary" download>
+            Baixar PDF
           </a>
         </div>
+        <SocialLinks className="footer-links" />
       </footer>
+    </div>
+  );
+}
+
+type SocialLinksProps = {
+  className: string;
+};
+
+function SocialLinks({ className }: SocialLinksProps) {
+  return (
+    <div className={className}>
+      <a
+        href={profile.linkedin}
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="Abrir LinkedIn de Kaique Albuquerque em nova aba"
+      >
+        <SocialIcon kind="linkedin" />
+        <span>LinkedIn</span>
+      </a>
+      <a
+        href={profile.github}
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="Abrir GitHub de Kaique Albuquerque em nova aba"
+      >
+        <SocialIcon kind="github" />
+        <span>GitHub</span>
+      </a>
+      <a
+        href={profile.whatsapp}
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="Conversar com Kaique Albuquerque pelo WhatsApp em nova aba"
+      >
+        <SocialIcon kind="whatsapp" />
+        <span>WhatsApp</span>
+      </a>
     </div>
   );
 }
