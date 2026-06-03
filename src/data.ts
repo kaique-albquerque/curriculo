@@ -55,7 +55,6 @@ export const profile = {
   github: "https://github.com/kaique-albquerque",
   whatsapp:
     "https://wa.me/5518988103982?text=Ola%2C+Kaique%2C+vi+o+seu+curriculo+online+e+gostaria+de+conversar.",
-  resumePdf: "/kaique-albuquerque-curriculo.pdf",
   intro:
     "Desenvolvedor com experiencia em React, TypeScript, APIs e produtos internos. Une front-end, dashboards, automacao e visao de negocio para criar interfaces uteis, mensuraveis e sustentaveis.",
   objective:

@@ -82,8 +82,11 @@ function App() {
           </div>
 
           <div className="hero-actions" aria-label="Acoes principais">
-            <a href={profile.resumePdf} className="button button-primary" download>
-              Baixar PDF
+            <a
+              href={`mailto:${profile.email}?subject=Solicitacao%20de%20curriculo%20em%20PDF`}
+              className="button button-primary"
+            >
+              Solicitar PDF
             </a>
             <a href="#projetos" className="button button-secondary">
               Ver projetos
@@ -271,8 +274,11 @@ function App() {
         </div>
         <div className="footer-cta">
           <p className="footer-note">Disponivel para oportunidades, parcerias e projetos.</p>
-          <a href={profile.resumePdf} className="button button-primary" download>
-            Baixar PDF
+          <a
+            href={`mailto:${profile.email}?subject=Solicitacao%20de%20curriculo%20em%20PDF`}
+            className="button button-primary"
+          >
+            Solicitar PDF
           </a>
         </div>
         <SocialLinks className="footer-links" />
