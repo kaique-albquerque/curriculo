@@ -633,3 +633,109 @@ ul {
     border-radius: 18px;
   }
 }
+
+@media print {
+  :root {
+    color-scheme: light;
+    --page-text: #111827;
+    --page-muted: #374151;
+    --page-strong: #111827;
+    --page-accent: #047857;
+    --page-accent-strong: #92400e;
+    --page-border: rgba(17, 24, 39, 0.16);
+    --page-border-soft: rgba(17, 24, 39, 0.1);
+    --page-surface: #ffffff;
+    --page-surface-soft: #f3f4f6;
+    --page-surface-strong: #eef2f7;
+    --page-shadow: none;
+    --page-bg: #ffffff;
+    --button-primary-text: #ffffff;
+    --button-primary-shadow: none;
+  }
+
+  html,
+  body {
+    background: #ffffff;
+  }
+
+  body {
+    font-size: 11px;
+  }
+
+  .page-shell {
+    width: 100%;
+    padding: 0;
+  }
+
+  .hero,
+  .work-grid,
+  .dual-grid,
+  .skill-grid,
+  .highlight-strip {
+    grid-template-columns: 1fr 1fr;
+    gap: 0.6rem;
+  }
+
+  .hero-copy,
+  .hero-card,
+  .panel,
+  .timeline-card,
+  .project-card,
+  .skill-card,
+  .highlight-strip,
+  .site-footer {
+    box-shadow: none;
+    backdrop-filter: none;
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
+  .section-nav,
+  .theme-switcher {
+    display: none;
+  }
+
+  .hero-copy,
+  .hero-card,
+  .panel,
+  .timeline-card,
+  .project-card,
+  .skill-card,
+  .site-footer {
+    border-radius: 10px;
+    padding: 0.75rem;
+  }
+
+  .hero h1 {
+    font-size: 2.6rem;
+  }
+
+  .panel h2,
+  .section-heading h2 {
+    font-size: 1.25rem;
+  }
+
+  .profile-image {
+    max-height: 180px;
+  }
+
+  .button {
+    min-height: auto;
+    padding: 0.45rem 0.7rem;
+  }
+
+  .timeline {
+    gap: 0.55rem;
+  }
+
+  .project-grid,
+  .stack-list,
+  .certificate-list {
+    gap: 0.55rem;
+  }
+
+  a[href^="http"]::after,
+  a[href^="mailto"]::after {
+    content: "";
+  }
+}
